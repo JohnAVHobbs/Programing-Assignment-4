@@ -1,0 +1,102 @@
+/*
+# Author:              John Hobbs
+# BannerID:            001369774
+# Course:              CS 181
+# Assignment:          PA4
+# Date Assigned:       Monday, March 18, 2024
+# Date/Time Due:       Saturday, March 30, 2024 -- 11:55 pm
+
+# Description:         This Program will exercise Object-
+                       Oriented concepts with C++
+# Certification of Authenticity:
+    I certify that this assignment is entirely my own work.
+*/
+
+//A program to find the average pay and the highest paid manager among up to
+//100 user inputed managers, which are stored in Manager class objects
+//which are objects of a class derived from a given Employee class
+
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include "Manager.h"
+
+using namespace std;
+
+int main()
+{
+
+   //get the number of managers from the user
+  int number_of_managers;
+  cout << "Enter number of managers: ";
+  cin >> number_of_managers;
+
+  //create an array of pointers to Manager objects
+  Manager* managers_array[100];
+  //create the manager objects need in the array
+  for(int i = 0; i < number_of_managers; i++)
+  {
+    managers_array[i] = new Manager("", 0, 0, 0);
+  }
+
+  //take user input for the managers
+  for(int i = 0; i < number_of_managers; i++)
+  {
+    string name;
+    double hourly_wage;
+    double hours_worked;
+    double bonus;
+    string sink;
+
+
+    cout << endl << "Enter manager " << i << " name: ";
+    //store the newline character
+    getline(cin, sink);
+    getline(cin, name);
+    //get the hourly wage of a manager
+    cout << "Enter manager " << i << " hourly wage: ";
+    cin >> hourly_wage;
+    //get the hours worked of a manager
+    cout << "Enter manager " << i << " hours worked: ";
+    cin >> hours_worked;
+    //get the bonus earned by a manager
+    cout << "Enter manager " << i << " bonus: ";
+    cin >> bonus;
+    //create a Manager object to store the inputted data
+    managers_array[i] = new Manager(name, hourly_wage, hours_worked, bonus);
+  }
+  //find the highest paid manager
+  int display_index = 0;
+  for(int i = 0; i < number_of_managers; i++)
+  {
+    if(managers_array[i]->calcPay()
+        > managers_array[display_index]->calcPay())
+    {
+      display_index = i;
+    }
+  }
+  //display the highest paid manager and how much they get paid
+  cout << endl << fixed << setprecision(2) << "Highest paid manager is "
+    << managers_array[display_index]->getName() << " who is paid $"
+    << managers_array[display_index]->calcPay() << endl;
+
+  //calculate the total amount paid to the managers
+  double total_pay = 0;
+  for(int i = 0; i < number_of_managers; i++)
+  {
+    total_pay += managers_array[i]->calcPay();
+  }
+
+  //calculate the average pay
+  double average_pay = total_pay / number_of_managers;
+  //display the average pay with a message
+  cout << "Average pay is $" << average_pay << endl;
+
+  //delete the dynamically allocated memory
+  for(int i = 0; i < number_of_managers; i++)
+  {
+    delete managers_array[i];
+    managers_array[i] = nullptr;
+  }
+  return 0;
+}
